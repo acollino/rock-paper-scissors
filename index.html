@@ -6,12 +6,25 @@
     <script src="script.js" defer></script>
   </head>
   <body style="text-align: center;">
-    <h1>Play Rock, Paper, Scissors in the DevTools Console!</h1>
-    <h2>Click a button to make your move!</h2>
+    <h1>Play Rock, Paper, Scissors Against the Computer!</h1>
+    <h2>The match ends after 5 rounds. Click a button to make your move:</h2>
     <div>
       <button id="Rock">Rock</button>
       <button id="Paper">Paper</button>
       <button id="Scissors">Scissors</button>
     </div>
+    <h2>Score:</h2>
+    <div id="scores" style="display: flex; justify-content: space-evenly;">
+        <div style="display: flex; flex-direction: column;">
+          <span><strong>You:</strong></span>
+          <div id="Player">0</div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <span><strong>Computer:</strong></span>
+          <div id="Computer">0</div>
+        </div>
+    </div>
+    <div id="Rounds" style="padding-top:10px; white-space: pre;"></div>
+    <div id="Results" style="padding-top:10px; white-space: pre; font-size: large; font-weight: bold;"></div>
   </body>
 </html>

@@ -1,96 +1,65 @@
+let roundCounter = 0;
+let playerPoint = 0;
+let compPoint = 0;
+let score = "";
+const results = document.querySelector("#Rounds");
+const playerScore = document.querySelector("#Player");
+const compScore = document.querySelector("#Computer");
+const finalBox = document.querySelector("#Results");
+
 const buttons = document.querySelectorAll("button");
 buttons.forEach(function(item){
   item.addEventListener("click", function(e){
-    console.log(playRound(item.id));
+    playRound(item.id);
   });
 });
-
-// function myFunction(item){
-//   item.addEventListener("click", function(e){
-//     console.log(playRound(item.id));
-//   });
-// }
 
 function computerPlay(){
   let options = ["Rock", "Paper", "Scissors"];
   return options[Math.floor(Math.random()*options.length)];
 }
 
-function playRound(playerSelection){
-  let ans = "Try again, something went wrong!";
-  let play = playerSelection.toLowerCase();
-  let computerSelection = computerPlay();
-  let comp = computerSelection.toLowerCase();
-  if(play == comp){
-    ans = "It's a draw, you both chose "+computerSelection+"!";
-  }
-  else if(play == "rock"){
-    if(comp == "paper"){
-      ans = "You lose! Paper beats Rock!";
-    }
-    else{
-      ans = "You win! Rock beats Scissors!";
-    }
-  }
-  else if(play == "paper"){
-    if(comp == "scissors"){
-      ans = "You lose! Scissors beats Paper!";
-    }
-    else{
-      ans = "You win! Paper beats Rock!";
-    }
-  }
-  else if(play == "scissors"){
-    if(comp == "rock"){
-      ans = "You lose! Rock beats Scissors!";
-    }
-    else{
-      ans = "You win! Scissors beats Paper!";
-    }
-  }
-  return ans;
+function resetGame(){
+  roundCounter=1;
+  playerScore.textContent = playerPoint = 0;
+  compScore.textContent = compPoint = 0;
+  finalBox.textContent = "";
 }
 
-function game(){
-  let playerPoint = 0;
-  let compPoint = 0;
-  let result;
-  let score;
-  // for(let x=0; x<5; x++){
-  //   let entry = prompt("Enter your move!").trim();
-  //   while(checkEntryWrong(entry)){
-  //     entry = prompt("That wasn't a valid move, try again!");
-  //   }
-  //   result = playRound(entry, computerPlay());
-  //   console.log("Round "+(x+1)+": "+result);
-  //   if(result.includes("lose")){
-  //     compPoint++;
-  //   }
-  //   else if(result.includes("win")){
-  //     playerPoint++;
-  //   }
-  // }
-  if(playerPoint==compPoint){
-    score = "Tie Game!";
+function endGame(playpoints, compPoints){
+  if(playpoints==compPoints){
+    return "Tie Game!";
   }
-  else if(playerPoint>compPoint){
-    score = "You win!";
+  else if(playpoints>compPoints){
+    return "You win!";
+  }
+  return "You lose!";
+}
+
+function playRound(playerSelection){
+  (roundCounter >= 5)? resetGame() : roundCounter++;
+  let computerSelection = computerPlay();
+  ans = "You chose "+playerSelection+" and the computer chose "+computerSelection+ "!";
+  if(playerSelection == computerSelection){
+    ans = "It's a draw!\nYou both chose "+computerSelection+", so no points this round!";
+  }
+  else if((playerSelection == "Rock"&&computerSelection == "Scissors")||(playerSelection == "Paper"&&computerSelection == "Rock")||(playerSelection == "Scissors"&&computerSelection == "Paper")){
+    ans = "You win the round!\n"+ans;
+    playerScore.textContent = ++playerPoint;
   }
   else{
-    score = "You lose!";
+    ans = "The computer wins the round!\n"+ans;
+    compScore.textContent = ++compPoint;
   }
-  console.log(`Final Score:
-  You: ${playerPoint}
-  Computer: ${compPoint}
-  ${score}`);
-}
-
-function checkEntryWrong(input){
-  if(input!=null){
-    let eval = input.toLowerCase();
-    if(eval=="rock"||eval=="scissors"||eval=="paper"){
-      return false;
-    }
+  if(roundCounter > 1){
+    results.textContent += "\n"+`Round ${roundCounter}: ${ans}` +"\n";
   }
-  return true;
+  else{
+    results.textContent = `Round ${roundCounter}: ${ans}`+"\n";
+  }
+  if(roundCounter==5){
+    score = endGame(playerPoint, compPoint);
+    finalBox.textContent = "Final Results:\n"+
+    `You: ${playerPoint}, Computer: ${compPoint}`+"\n"+score;
+  }
 }
